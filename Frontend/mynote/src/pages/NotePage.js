@@ -8,7 +8,7 @@ const NotePage = () => {
 
     const noteId = useParams().id;
     const navigation = useNavigate()
-    const [note, setNote] = useState(null);
+    const [note, setNote] = useState('');
 
     useEffect(() => {
         getNote()
@@ -44,6 +44,8 @@ const NotePage = () => {
             updateNote();
         } else if (noteId === 'new' && note.body !== null) {
             createNote();
+        } else if (noteId === 'new' && note.body === null) {
+            navigation('/');
         }
 
         navigation('/');

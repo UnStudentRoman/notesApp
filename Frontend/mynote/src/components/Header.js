@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { ReactComponent as DarkMode } from '../assets/DarkMode.svg'
 
 const Header = (props) => {
 
@@ -13,7 +13,9 @@ const Header = (props) => {
     return (
         <div className="app-header">
             <h1>{props.title}</h1>
-            <button onClick={handleTheme}>test</button>
+            <DarkMode className="theme-button" onClick={handleTheme}></DarkMode>
+            {/* <button >test</button> */}
+       
         </div>
     )
 }

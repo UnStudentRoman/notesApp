@@ -247,3 +247,8 @@ a {
 .note textarea::-webkit-scrollbar {
   display: none;
 }
+
+.theme-button:active {
+  transform: rotate(180deg);
+  transition: 0.1s ease;
+}
