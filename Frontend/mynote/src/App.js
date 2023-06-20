@@ -3,14 +3,23 @@ import './App.css';
 import Header from './components/Header';
 import NotesListPage from './pages/NotesListPage'
 import NotePage from './pages/NotePage';
-
+import Theme from './components/ThemeButton';
+import { useState } from 'react';
 
 function App() {
+  const theTitle = 'Note List'
+  const [isDark, setIsDark] = useState('container')
+
+
+  const handleChangeHeader = (e) => {
+    e ? setIsDark('container dark') : setIsDark('container');
+  }
+
   return (
     <Router>
-      <div className='container'>
+      <div className={isDark}>
         <div className='app'>
-          <Header />
+          <Header title={theTitle} onChangeTheme={handleChangeHeader} />
           <Routes>
             <Route path='/' exact Component={NotesListPage}/>
             <Route path='/note/:id' Component={NotePage}/>

@@ -9,11 +9,11 @@ export default function Theme() {
         if (theme) {
           setTheme((currentTheme) => !currentTheme);
           console.log(theme);
-          return 'container dark';
+          return <div className='container'></div>
       } else {
           setTheme((currentTheme) => !currentTheme);
           console.log(theme);
-          return 'container';
+          return <div className='container dark'></div>;
       }
     }
 

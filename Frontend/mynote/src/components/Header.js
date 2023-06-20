@@ -1,26 +1,19 @@
 import { useState } from "react";
 
 
-const Header = () => {
+const Header = (props) => {
 
     const [theme, setTheme] = useState(false)
 
     const handleTheme = () => {
-        if (theme) {
-          setTheme(!theme);
-          console.log(theme)
-          return theme;
-      } else {
-          setTheme(!theme);
-          console.log(theme)
-          return theme;
-      }
+        setTheme((currentTheme) => !currentTheme);
+        props.onChangeTheme(!theme);
     }
 
     return (
         <div className="app-header">
-            <h1>Note List</h1>
-            <p onClick={handleTheme}>test{theme}</p>
+            <h1>{props.title}</h1>
+            <button onClick={handleTheme}>test</button>
         </div>
     )
 }
