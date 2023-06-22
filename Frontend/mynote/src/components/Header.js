@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ReactComponent as DarkMode } from '../assets/DarkMode.svg'
+import { Link } from "react-router-dom";
+import PrivateRoute from '../components/PrivateRoute'
 
 const Header = (props) => {
 
@@ -13,8 +15,10 @@ const Header = (props) => {
     return (
         <div className="app-header">
             <h1>{props.title}</h1>
-            <DarkMode className="theme-button" onClick={handleTheme}></DarkMode>
-            {/* <button >test</button> */}
+            <div>
+                <Link to='/login'>test</Link>
+                <DarkMode   Mode className="theme-button" onClick={handleTheme}></DarkMode>
+            </div>
        
         </div>
     )

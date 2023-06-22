@@ -5,6 +5,7 @@ import NotesListPage from './pages/NotesListPage'
 import NotePage from './pages/NotePage';
 import Theme from './components/ThemeButton';
 import { useState } from 'react';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   const theTitle = 'Note List'
@@ -21,6 +22,7 @@ function App() {
         <div className='app'>
           <Header title={theTitle} onChangeTheme={handleChangeHeader} />
           <Routes>
+            <Route path='/login' exact Component={LoginPage}/>
             <Route path='/' exact Component={NotesListPage}/>
             <Route path='/note/:id' Component={NotePage}/>
           </Routes>
