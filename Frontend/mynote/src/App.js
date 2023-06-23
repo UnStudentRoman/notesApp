@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 import './App.css';
+
 import Header from './components/Header';
 import NotesListPage from './pages/NotesListPage'
 import NotePage from './pages/NotePage';
-import Theme from './components/ThemeButton';
-import { useState } from 'react';
 import LoginPage from './pages/LoginPage';
+import PrivateRoutes from './components/PrivateRoute';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const theTitle = 'Note List'
@@ -18,16 +20,22 @@ function App() {
 
   return (
     <Router>
-      <div className={isDark}>
-        <div className='app'>
-          <Header title={theTitle} onChangeTheme={handleChangeHeader} />
-          <Routes>
-            <Route path='/login' exact Component={LoginPage}/>
-            <Route path='/' exact Component={NotesListPage}/>
-            <Route path='/note/:id' Component={NotePage}/>
-          </Routes>
+      <AuthProvider>
+        <div className={isDark}>
+          <div className='app'>
+            <Header title={theTitle} onChangeTheme={handleChangeHeader} />
+            <Routes>
+              <Route element={<PrivateRoutes />}>
+                <Route element={<NotesListPage/>} path='/' exact />
+                <Route element={<NotePage/>} path='/note/:id' exact />
+              </Route>
+              <Route element={<LoginPage/>} path='/login'/>
+              {/* <Route path='/' exact Component={NotesListPage}/>
+              <Route path='/note/:id' Component={NotePage}/> */}
+            </Routes>
+          </div>
         </div>
-      </div>
+      </AuthProvider>
     </Router>
   );
 }
