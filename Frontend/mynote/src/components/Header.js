@@ -5,7 +5,9 @@ import PrivateRoute from '../components/PrivateRoute'
 import AuthContext from "../context/AuthContext";
 
 const Header = (props) => {
-    const {name} = useContext(AuthContext)
+
+    const {user, logoutUser} = useContext(AuthContext)
+
     const [theme, setTheme] = useState(false)
 
     const handleTheme = () => {
@@ -15,10 +17,15 @@ const Header = (props) => {
 
     return (
         <div className="app-header">
-            <h1>{props.title}</h1>
+            <h1>{user && `${user.username}'s`} {props.title}</h1>
             <div>
-                <Link to='/login'>{name}</Link>
+                { user ? (
+                    <button onClick={logoutUser}>Logout</button>
+
+                ) : <Link to='/login'>Login</Link> }
+                
                 <DarkMode   Mode className="theme-button" onClick={handleTheme}></DarkMode>
+
             </div>
        
         </div>

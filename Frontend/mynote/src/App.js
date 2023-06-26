@@ -10,7 +10,7 @@ import PrivateRoutes from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
-  const theTitle = 'Note List'
+  const theTitle = 'Notes'
   const [isDark, setIsDark] = useState('container')
 
 
