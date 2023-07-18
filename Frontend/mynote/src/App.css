@@ -256,3 +256,41 @@ a {
 .header-right-side {
   display: flex;
 }
+
+.logging-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+.logging-form input,
+.logging-form button {
+  margin-top: 1.5rem;
+  width: 70%;
+  background-color: var(--color-lighter);
+  margin-bottom: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-bottom: 1px solid  var(--color-text);
+  transition: all 0.2s ease-in-out;
+}
+
+.logging-form button {
+  background: var(--color-main);
+  border-radius: 4px;
+}
+
+.logging-form input:focus {
+  outline: none;
+  transition: all 0.1s ease-in-out;
+  border-bottom: 2px solid var(--color-main);
+}
+
+.logging-form button:active {
+  outline: none;
+  transition: all 0.05s ease-in-out;
+  background-color: var(--color-main);
+  color: var(--color-white);
+
+}
