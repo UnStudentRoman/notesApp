@@ -6,6 +6,7 @@ import { ReactComponent as DeleteButton } from '../assets/delete.svg'
 
 const NotePage = () => {
 
+    const [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     const noteId = useParams().id;
     const navigation = useNavigate()
     const [note, setNote] = useState('');
@@ -16,7 +17,13 @@ const NotePage = () => {
 
     let getNote = async () => {
         if (noteId !== 'new') {
-            const res = await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`);
+            const res = await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authTokens.access}` 
+                },
+            });
             const data = await res.json();
             setNote(data);
         } else return
@@ -57,7 +64,8 @@ const NotePage = () => {
         fetch(`http://127.0.0.1:8000/api/notes/create/`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authTokens.access}` 
             },
             body: JSON.stringify(note)
         })

@@ -18,7 +18,7 @@ const Header = (props) => {
     return (
         <div className="app-header">
             <h1>{user && `${user.username}'s`} {props.title}</h1>
-            <div>
+            <div className='header-right-side'>
                 { user ? (
                     <button onClick={logoutUser}>Logout</button>
 

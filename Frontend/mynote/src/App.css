@@ -252,3 +252,7 @@ a {
   transform: rotate(180deg);
   transition: 0.1s ease;
 }
+
+.header-right-side {
+  display: flex;
+}
