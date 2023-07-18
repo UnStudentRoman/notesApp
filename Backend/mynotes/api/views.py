@@ -1,8 +1,8 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 from .models import Note
 from .serializers import NoteSerializer
 
@@ -96,10 +96,11 @@ def createNote(request):
 @api_view(['GET'])
 def getNote(request, pk):
     notes = Note.objects.get(id=pk)
-    print(f'Notes user is {notes.user}')
-    print(f'Request user id is {request.user}')
     if request.user != notes.user:
-        return Response(reverse_lazy(getNotes))
+        print(f'Notes user is {notes.user}')
+        print(f'Request user id is {request.user}')
+        return JsonResponse({'response':'Unauthorized'})
+    
     serializer = NoteSerializer(notes, many=False)
     return Response(serializer.data)
 

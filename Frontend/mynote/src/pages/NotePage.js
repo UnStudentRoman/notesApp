@@ -25,7 +25,11 @@ const NotePage = () => {
                 },
             });
             const data = await res.json();
-            setNote(data);
+            const checkUnauthorized = {data}.data.response
+
+            checkUnauthorized === 'Unauthorized' ? navigation('/') : setNote(data);
+
+            
         } else return
 
     }

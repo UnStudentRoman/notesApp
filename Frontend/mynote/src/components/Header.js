@@ -7,7 +7,6 @@ import AuthContext from "../context/AuthContext";
 const Header = (props) => {
 
     const {user, logoutUser} = useContext(AuthContext)
-
     const [theme, setTheme] = useState(false)
 
     const handleTheme = () => {
@@ -17,7 +16,7 @@ const Header = (props) => {
 
     return (
         <div className="app-header">
-            <h1>{user && `${user.username}'s`} {props.title}</h1>
+            <h1>{user && `${(user.username.charAt(0).toUpperCase() + user.username.slice(1))}'s`} {props.title}</h1>
             <div className='header-right-side'>
                 { user ? (
                     <button onClick={logoutUser}>Logout</button>
