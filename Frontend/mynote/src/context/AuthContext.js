@@ -17,9 +17,35 @@ export const AuthProvider = ({children}) => {
 
     const navigate = useNavigate()
 
+    const registerUser = async (e) => {
+        e.preventDefault()
+        console.log(
+            {
+                "username": e.target.username.value,
+                "email": e.target.email.value,
+                "password": e.target.password.value,
+            })
+        // let res = await fetch('http://127.0.0.1:8000/api/register/', {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         "username": e.target.username.value,
+        //         "email": e.target.email.value,
+        //         "password": e.target.password.value,
+        //     })
+        // })
+    }
+
     const loginUser = async (e) => {
         e.preventDefault()
-
+        console.log(
+            {
+                "username": e.target.username.value,
+                "password": e.target.password.value,
+            }
+        )
         let res = await fetch('http://127.0.0.1:8000/api/token/', {
             method: "POST",
             headers: {
@@ -73,6 +99,7 @@ export const AuthProvider = ({children}) => {
 
     const contextData = {
         user:user,
+        registerUser: registerUser,
         loginUser: loginUser,
         logoutUser: logoutUser,
     }

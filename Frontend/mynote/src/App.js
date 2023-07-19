@@ -8,6 +8,7 @@ import NotePage from './pages/NotePage';
 import LoginPage from './pages/LoginPage';
 import PrivateRoutes from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   const theTitle = 'Notes'
@@ -30,6 +31,7 @@ function App() {
                 <Route element={<NotePage/>} path='/note/:id' exact />
               </Route>
               <Route element={<LoginPage/>} path='/login'/>
+              <Route element={<RegisterPage/>} path='/register'/>
               {/* <Route path='/' exact Component={NotesListPage}/>
               <Route path='/note/:id' Component={NotePage}/> */}
             </Routes>

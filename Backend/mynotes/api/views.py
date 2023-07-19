@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Note
 from .serializers import NoteSerializer
+from django.core.exceptions import ObjectDoesNotExist
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
@@ -49,6 +51,23 @@ def getRoutes(request):
         ]
     return Response(routes)
 
+
+
+
+# ---------------------------------- REGISTER ---------------------------------- #
+
+@api_view(['POST'])
+def registerUser(request):
+    newUser = request.user
+    newMail = request.email
+    newPasswd = request.password
+    try:
+        newUser = User.objects.get(username=newUser)
+
+    except User.DoesNotExist:
+        newUser = User.objects.create_user(username=newUser, email=newMail, password=newPasswd)
+        newUser.save()
+        return JsonResponse({'response':'Success'})
 
 
 # ---------------------------------- LOGIN ---------------------------------- #
@@ -95,12 +114,14 @@ def createNote(request):
 
 @api_view(['GET'])
 def getNote(request, pk):
-    notes = Note.objects.get(id=pk)
-    if request.user != notes.user:
-        print(f'Notes user is {notes.user}')
-        print(f'Request user id is {request.user}')
+    try:
+        notes = Note.objects.get(id=pk)
+        if request.user != notes.user:
+            return JsonResponse({'response':'Unauthorized'})
+        
+    except ObjectDoesNotExist:
         return JsonResponse({'response':'Unauthorized'})
-    
+
     serializer = NoteSerializer(notes, many=False)
     return Response(serializer.data)
 
