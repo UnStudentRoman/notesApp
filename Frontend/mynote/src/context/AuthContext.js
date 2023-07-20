@@ -19,23 +19,32 @@ export const AuthProvider = ({children}) => {
 
     const registerUser = async (e) => {
         e.preventDefault()
-        console.log(
-            {
-                "username": e.target.username.value,
-                "email": e.target.email.value,
-                "password": e.target.password.value,
+
+        try {
+            let res = await fetch('http://127.0.0.1:8000/api/register/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "username": e.target.username.value,
+                    "email": e.target.email.value,
+                    "password": e.target.password.value,
+                })
             })
-        // let res = await fetch('http://127.0.0.1:8000/api/register/', {
-        //     method: "POST",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "username": e.target.username.value,
-        //         "email": e.target.email.value,
-        //         "password": e.target.password.value,
-        //     })
-        // })
+            let data = await res.json();
+
+            if (res.ok) {
+                navigate('/login');
+            } else if (res.status !== 400) {
+                alert('Something went wrong or the server is down. Please report the issue.');
+            } else {
+                alert(data.response);
+            }   
+        }
+        catch (err) {
+            alert('Something went wrong or the server is down.');
+        }
     }
 
     const loginUser = async (e) => {
@@ -46,25 +55,32 @@ export const AuthProvider = ({children}) => {
                 "password": e.target.password.value,
             }
         )
-        let res = await fetch('http://127.0.0.1:8000/api/token/', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "username": e.target.username.value,
-                "password": e.target.password.value,
-            })
-        })
 
-        let data = await res.json();
-        if (res.status === 200) {
-            setAuthTokens(data)
-            setUser(jwt_decode(data.access));
-            localStorage.setItem('authTokens', JSON.stringify(data));
-            navigate('/');
-        } else {
-            alert('Something went wrong.');
+        try {
+
+            let res = await fetch('http://127.0.0.1:8000/api/token/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "username": e.target.username.value,
+                    "password": e.target.password.value,
+                })
+            })
+    
+            let data = await res.json();
+            if (res.status === 200) {
+                setAuthTokens(data)
+                setUser(jwt_decode(data.access));
+                localStorage.setItem('authTokens', JSON.stringify(data));
+                navigate('/');
+            } else {
+                alert('Something went wrong.');
+            }
+        }
+        catch (err) {
+            alert('Something went wrong or the server is down.');
         }
     }
 
@@ -77,24 +93,31 @@ export const AuthProvider = ({children}) => {
 
     const updateToken = async () => {
         console.log('Token Updated.')
-        let res = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "refresh": authTokens.refresh,
-            })
-        })
-        let data = await res.json();
 
-        if (res.status === 200) {
-            setAuthTokens(data)
-            setUser(jwt_decode(data.access));
-            localStorage.setItem('authTokens', JSON.stringify(data));
-        } else {
-            logoutUser();
+        try {
+            let res = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "refresh": authTokens.refresh,
+                })
+            })
+            let data = await res.json();
+    
+            if (res.status === 200) {
+                setAuthTokens(data)
+                setUser(jwt_decode(data.access));
+                localStorage.setItem('authTokens', JSON.stringify(data));
+            } else {
+                logoutUser();
+            }
         }
+        catch (err) {
+            alert('Something went wrong or the server is down.');
+        }
+
     }
 
     const contextData = {

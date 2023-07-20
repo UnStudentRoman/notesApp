@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Note
@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
-
+import json
 # Create your views here.
 
 
@@ -58,20 +58,26 @@ def getRoutes(request):
 
 @api_view(['POST'])
 def registerUser(request):
-    newUser = request.user
-    newMail = request.email
-    newPasswd = request.password
+    # print(request.data)
+    newUser = request.data['username']
+    newMail = request.data['email']
+    newPasswd = request.data['password']
     try:
         newUser = User.objects.get(username=newUser)
+        if newUser:
+            response = {'response': 'User already exists.'}
+            return HttpResponseBadRequest(json.dumps(response), headers={"Content-Type": "application/json"})
 
     except User.DoesNotExist:
         newUser = User.objects.create_user(username=newUser, email=newMail, password=newPasswd)
         newUser.save()
         return JsonResponse({'response':'Success'})
 
+# ---------------------------------- END REGISTER ---------------------------------- #
+
+
 
 # ---------------------------------- LOGIN ---------------------------------- #
-
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -87,6 +93,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+# ---------------------------------- END LOGIN ---------------------------------- #
 
 
 
@@ -126,6 +134,8 @@ def getNote(request, pk):
     return Response(serializer.data)
 
 
+# ---------------------------------- MODIFY ---------------------------------- #
+
 @api_view(['PUT'])
 def updateNote(request, pk):
     data = request.data
@@ -138,6 +148,10 @@ def updateNote(request, pk):
 
     return Response(serializer.data)
 
+# ---------------------------------- MODIFY END ---------------------------------- #
+
+
+# ---------------------------------- DELETE ---------------------------------- #
 
 @api_view(['DELETE'])
 def deleteNote(request, pk):
@@ -146,5 +160,5 @@ def deleteNote(request, pk):
 
     return Response('Note was deleted.')
 
-
+# ---------------------------------- END DELETE ---------------------------------- #
 
